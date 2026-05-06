@@ -2,7 +2,7 @@
 
 Six browser games in one place, built with React. Two of them support real-time online multiplayer with shareable room codes, no account needed.
 
-**[Play now](https://your-app.vercel.app)**
+**[Play now](https://game-hub-kappa-eight-33.vercel.app)**
 
 ---
 
