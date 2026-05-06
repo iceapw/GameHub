@@ -10,7 +10,6 @@ export function TriviaGame() {
     categories,
     currentQuestion,
     error,
-    feedback,
     gameState,
     nextQuestion,
     questions,
@@ -35,9 +34,6 @@ export function TriviaGame() {
       {error ? (
         <div className="trivia-banner trivia-banner-error">{error}</div>
       ) : null}
-      {feedback ? (
-        <div className="trivia-banner trivia-banner-feedback">{feedback}</div>
-      ) : null}
 
       <div className="trivia-layout">
         <TriviaQuestion
@@ -47,6 +43,7 @@ export function TriviaGame() {
         />
 
         <TriviaSummary
+          currentQuestion={currentQuestion}
           gameState={gameState}
           onNextQuestion={nextQuestion}
           onRestart={restartGame}

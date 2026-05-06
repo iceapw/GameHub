@@ -1,4 +1,4 @@
-import TicTacToeGame from "./tic-tac-toe/TicTacToeGame";
+import TicTacToeGame from "./TicTacToeGame";
 
 export function TicTacToe() {
 	return <TicTacToeGame />;

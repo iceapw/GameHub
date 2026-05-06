@@ -5,9 +5,9 @@ export function GameRoomHeader({ title, onBackToLobby, backLabel = "← Back to 
     <header className="pg-header">
       <h2 className="pg-heading">{title}</h2>
       <nav>
-        <button className="room-back-button" onClick={onBackToLobby} type="button">
+        <a onClick={onBackToLobby} className="nav-link">
           {backLabel}
-        </button>
+        </a>
       </nav>
     </header>
   );

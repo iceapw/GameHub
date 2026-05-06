@@ -132,17 +132,55 @@ header .nav-link:hover {
 }
 
 /* ── Difficulty ── */
-.difficulty-info {
-  font-family: "Rajdhani", sans-serif;
-  font-size: 0.85rem;
-  color: #475569;
-  letter-spacing: 0.08em;
+.game-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.difficulty-info strong {
-  color: #818cf8;
-  text-transform: uppercase;
+.difficulty-picker {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.difficulty-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(129, 140, 248, 0.15);
+  border-radius: 0;
+  color: #475569;
+  cursor: pointer;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.62rem;
   font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 0.75rem;
+  text-transform: uppercase;
+  transition: all 0.18s;
+}
+
+.difficulty-btn:hover {
+  color: #94a3b8;
+  border-color: rgba(129, 140, 248, 0.3);
+}
+
+.difficulty-btn.active-easy {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #34d399;
+}
+
+.difficulty-btn.active-normal {
+  background: rgba(129, 140, 248, 0.12);
+  border-color: rgba(129, 140, 248, 0.5);
+  color: #818cf8;
+}
+
+.difficulty-btn.active-hard {
+  background: rgba(244, 114, 182, 0.1);
+  border-color: rgba(244, 114, 182, 0.45);
+  color: #f472b6;
 }
 
 /* ── Score Board ──
@@ -180,7 +218,7 @@ header .nav-link:hover {
 [data-move] {
   background: rgba(129, 140, 248, 0.08);
   border: 1px solid rgba(129, 140, 248, 0.25);
-  border-radius: 8px;
+  border-radius: 0;
   color: #818cf8;
   cursor: pointer;
   font-family: "Orbitron", sans-serif;
@@ -256,7 +294,7 @@ header .nav-link:hover {
 #clear-highscores {
   background: rgba(255, 255, 255, 0.03) !important;
   border: 1px solid rgba(129, 140, 248, 0.15) !important;
-  border-radius: 6px !important;
+  border-radius: 0 !important;
   color: #475569 !important;
   font-family: "Rajdhani", sans-serif !important;
   font-size: 0.8rem !important;

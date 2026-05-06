@@ -41,7 +41,7 @@ export function HomePage() {
   return (
     <section className="home-section">
       <div className="home-name-section">
-        <h2 className="home-name-title">Enter Your Name</h2>
+        {!hasName && <h2 className="home-name-title">Enter Your Name</h2>}
         <div className="home-name-row">
           <div className="avatar-picker-wrap">
             <button
@@ -99,19 +99,15 @@ export function HomePage() {
             {games.map((game) => (
               <li
                 key={game.key}
+                style={{ "--game-color": game.color }}
                 onMouseEnter={() => setHoveredGame(game.key)}
                 onMouseLeave={() => setHoveredGame(null)}
               >
                 {hasName ? (
                   <Link to={game.path} className="game-list-item">
-                    <span style={{ fontSize: "1.4rem", flexShrink: 0 }}>
-                      {game.emoji}
-                    </span>
-                    <div>
-                      <p
-                        className="game-item-name"
-                        style={{ color: game.color }}
-                      >
+                    <span className="game-item-emoji">{game.emoji}</span>
+                    <div className="game-item-text">
+                      <p className="game-item-name" style={{ color: game.color }}>
                         {game.name}
                       </p>
                       <p className="game-item-desc">{game.description}</p>
@@ -119,20 +115,11 @@ export function HomePage() {
                   </Link>
                 ) : (
                   <div className="game-list-item game-list-item-disabled">
-                    <span
-                      style={{
-                        fontSize: "1.4rem",
-                        flexShrink: 0,
-                        opacity: 0.3,
-                      }}
-                    >
+                    <span className="game-item-emoji" style={{ opacity: 0.3 }}>
                       {game.emoji}
                     </span>
-                    <div>
-                      <p
-                        className="game-item-name"
-                        style={{ color: "#334155" }}
-                      >
+                    <div className="game-item-text">
+                      <p className="game-item-name" style={{ color: "#334155" }}>
                         {game.name}
                       </p>
                       <p className="game-item-desc">{game.description}</p>
@@ -159,11 +146,6 @@ export function HomePage() {
         </div>
       </div>
 
-      <div className="game-frame-credits">
-        <span className="credit-item">Apiwat Anachai</span>
-        <span className="credit-divider">×</span>
-        <span className="credit-item">Kymani Jarrett</span>
-      </div>
     </section>
   );
 }

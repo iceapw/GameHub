@@ -36,7 +36,6 @@ export function useGameActions({
   const loadPokemon = async () => {
     setLoadingPokemon(true);
     const p = await fetchRandomPokemon();
-    console.log(`🎮 Pokemon: ${p.name} (ID: ${p.id})`);
     setLoadingPokemon(false);
     return p;
   };

@@ -35,7 +35,7 @@ export function TriviaControls({ categories, onStartGame, onSettingsChange, sett
         <span className="trivia-label">Difficulty</span>
         <div className="trivia-difficulty-row" role="radiogroup" aria-label="Difficulty">
           {DIFFICULTIES.map((difficulty) => (
-            <label className="trivia-difficulty-chip" key={difficulty.value}>
+            <label className={`trivia-difficulty-chip trivia-difficulty-chip--${difficulty.value}`} key={difficulty.value}>
               <input
                 checked={settings.difficulty === difficulty.value}
                 disabled={isStarting}
@@ -50,9 +50,12 @@ export function TriviaControls({ categories, onStartGame, onSettingsChange, sett
         </div>
       </div>
 
-      <button className="trivia-start-button" onClick={onStartGame} disabled={isStarting} type="button">
-        {isStarting ? "Loading..." : "Start Trivia"}
-      </button>
+      <div className="trivia-control-group">
+        <span className="trivia-label">&nbsp;</span>
+        <button className="trivia-start-button" onClick={onStartGame} disabled={isStarting} type="button">
+          {isStarting ? "Loading..." : "Start Trivia"}
+        </button>
+      </div>
     </section>
   );
 }

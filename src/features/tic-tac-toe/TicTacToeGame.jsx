@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GameRoomHeader } from "../../components/game-room/GameRoomHeader";
 import { RoomPlayerBadge } from "../../components/game-room/RoomPlayerBadge";
-import { ScoreBar } from "../pokemon/components/ScoreBar";
+import { ScoreBar } from "../../components/game-room/ScoreBar";
 import { useRoomPolling } from "../../hooks/useRoomPolling";
 import {
   abandonRoom,
@@ -82,7 +82,9 @@ export function TicTacToeGame() {
     if (mode === "online" && roomId && game && game.phase !== "abandoned") {
       try {
         await abandonRoom(roomId, game);
-      } catch {}
+      } catch {
+        // ignore — already navigating away
+      }
     }
     resetToLobby();
   };
@@ -106,7 +108,9 @@ export function TicTacToeGame() {
       try {
         const updated = await safePush(roomId, nextGame);
         setGame(updated);
-      } catch {}
+      } catch {
+        // keep local state on network error
+      }
       return;
     }
 
@@ -122,7 +126,9 @@ export function TicTacToeGame() {
       try {
         const updated = await safePush(roomId, nextGame);
         setGame(updated);
-      } catch {}
+      } catch {
+        // keep local state on network error
+      }
       return;
     }
 
@@ -131,7 +137,7 @@ export function TicTacToeGame() {
 
   if (screen === "lobby") {
     return (
-      <div className="ttt-page">
+      <div className="pg-wrapper">
         <GameRoomHeader title="Tic Tac Toe" onBackToLobby={() => navigate("/")} />
         <TicTacToeLobby onJoinRoom={handleJoinRoom} onLocalPlay={handleLocalPlay} />
       </div>
@@ -140,7 +146,7 @@ export function TicTacToeGame() {
 
   if (screen === "waiting") {
     return (
-      <div className="ttt-page">
+      <div className="pg-wrapper">
         <GameRoomHeader title="Tic Tac Toe" onBackToLobby={handleBackToLobby} />
         <RoomPlayerBadge name={playerName} />
         <TicTacToeWaitingRoom
@@ -162,7 +168,7 @@ export function TicTacToeGame() {
   const isGameOver = game.phase === "gameOver";
 
   return (
-    <div className="ttt-page">
+    <div className="pg-wrapper">
       <GameRoomHeader title="Tic Tac Toe" onBackToLobby={handleBackToLobby} />
       <RoomPlayerBadge name={playerName} />
 

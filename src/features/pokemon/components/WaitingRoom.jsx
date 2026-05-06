@@ -23,7 +23,9 @@ export function WaitingRoom({ roomId, onGameStart, onBackToLobby }) {
           clearInterval(interval);
           onGameStart(gameState);
         }
-      } catch {}
+      } catch {
+        // silently retry on next tick
+      }
     }, 1000);
 
     return () => clearInterval(interval);

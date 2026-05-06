@@ -1,7 +1,9 @@
-import { GameSection } from "./rock-paper-scissors/components/GameSection";
-import { HighScoresSection } from "./rock-paper-scissors/components/HighScoresSection";
-import { PlayerInfoCard } from "./rock-paper-scissors/components/PlayerInfoCard";
-import "../styles/RPS.css";
+import { GameSection } from "./components/GameSection";
+import { HighScoresSection } from "./components/HighScoresSection";
+import { PlayerInfoCard } from "./components/PlayerInfoCard";
+import { GameRoomHeader } from "../../components/game-room/GameRoomHeader";
+import "../../styles/PokemonGame.css";
+import "../../styles/RPS.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -16,18 +18,23 @@ function decideWinner(player, cpu) {
   return beats[player] === cpu ? "player" : "cpu";
 }
 
-function getCpuMove({
-  difficulty = "normal",
-  lastPlayerMove = null,
-} = {}) {
+function getCpuMove({ difficulty = "normal", lastPlayerMove = null } = {}) {
   const moves = ["rock", "paper", "scissors"];
-  if (difficulty !== "hard" || !lastPlayerMove) {
-    return moves[Math.floor(Math.random() * 3)];
+  const rand = () => moves[Math.floor(Math.random() * 3)];
+
+  if (lastPlayerMove) {
+    if (difficulty === "easy") {
+      // 50% chance CPU plays the losing move (lets player win)
+      const loses = { rock: "scissors", paper: "rock", scissors: "paper" };
+      return Math.random() < 0.5 ? loses[lastPlayerMove] : rand();
+    }
+    if (difficulty === "hard") {
+      // 65% chance CPU counters player's last move
+      const counter = { rock: "paper", paper: "scissors", scissors: "rock" };
+      return Math.random() < 0.65 ? counter[lastPlayerMove] : rand();
+    }
   }
-  const counter = { rock: "paper", paper: "scissors", scissors: "rock" }[
-    lastPlayerMove
-  ];
-  return Math.random() < 0.6 ? counter : moves[Math.floor(Math.random() * 3)];
+  return rand();
 }
 
 function nextScore(prev, outcome) {
@@ -39,11 +46,9 @@ function nextScore(prev, outcome) {
 }
 
 export function RPSGamePage() {
-  const settings = JSON.parse(localStorage.getItem("rpsSettings")) || {};
   const navigate = useNavigate();
   const playerName = sessionStorage.getItem("playerName") || "Player";
   const playerAvatar = sessionStorage.getItem("playerAvatar") || "assassin";
-  const difficulty = settings?.difficulty || "normal";
 
   const [highScore, setHighScore] = useState(
     () => JSON.parse(localStorage.getItem("rpsHighScore")) || null,
@@ -70,18 +75,10 @@ export function RPSGamePage() {
   };
 
   return (
-    <main className="rps-main">
-      <header>
-        <h2>Rock Paper Scissors</h2>
-        <nav>
-          <a onClick={() => navigate("/")} className="nav-link">
-            ← Back to Lobby
-          </a>
-        </nav>
-      </header>
+    <div className="rps-main">
+      <GameRoomHeader title="Rock Paper Scissors" onBackToLobby={() => navigate("/")} />
       <PlayerInfoCard playerName={playerName} playerAvatar={playerAvatar} />
       <GameSection
-        difficulty={difficulty}
         onGameReset={handleGameReset}
         beats={beats}
         decideWinner={decideWinner}
@@ -89,6 +86,6 @@ export function RPSGamePage() {
         nextScore={nextScore}
       />
       <HighScoresSection highScore={highScore} onClear={handleClearHighScore} />
-    </main>
+    </div>
   );
 }

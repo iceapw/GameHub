@@ -1,11 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import { AppLayout } from "./components/Layout";
+import { AppLayout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
-import { RPSGamePage } from "./pages/RockPaperScissors";
-import { TicTacToe } from "./pages/TicTacToe";
-import { Trivia } from "./pages/Trivia";
-import { Wordle } from "./pages/Wordle";
-import Pokemon from "./pages/Pokemon";
+import { RPSGamePage } from "./features/rock-paper-scissors/RockPaperScissors";
+import { TicTacToe } from "./features/tic-tac-toe/TicTacToe";
+import { Trivia } from "./features/trivia/Trivia";
+import { Wordle } from "./features/wordle/Wordle";
+import Pokemon from "./features/pokemon/Pokemon";
+import { Memory } from "./features/memory/Memory";
 
 export const router = createBrowserRouter(
   [
@@ -19,6 +20,7 @@ export const router = createBrowserRouter(
         { path: "/trivia", element: <Trivia /> },
         { path: "/wordle", element: <Wordle /> },
         { path: "/pokemon", element: <Pokemon /> },
+        { path: "/memory", element: <Memory /> },
       ],
     },
   ],

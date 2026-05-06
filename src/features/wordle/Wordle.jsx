@@ -1,26 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { WordleGame } from "./wordle/WordleGame";
+import { WordleGame } from "./WordleGame";
+import { GameRoomHeader } from "../../components/game-room/GameRoomHeader";
+import { RoomPlayerBadge } from "../../components/game-room/RoomPlayerBadge";
+import "../../styles/PokemonGame.css";
 
 export function Wordle() {
   const navigate = useNavigate();
   const playerName = sessionStorage.getItem("playerName") || "Player";
 
   return (
-    <div className="wordle-shell">
-      <header className="wordle-shell-header">
-        <h2 className="wordle-shell-title">Wordle</h2>
-        <nav>
-          <a onClick={() => navigate("/")} className="nav-link">
-            ← Back to Lobby
-          </a>
-        </nav>
-      </header>
-
-      <div className="wordle-player-badge">
-        <span className="wordle-player-label">Playing as</span>
-        <span className="wordle-player-name">{playerName}</span>
-      </div>
-
+    <div className="pg-wrapper">
+      <GameRoomHeader title="Wordle" onBackToLobby={() => navigate("/")} />
+      <RoomPlayerBadge name={playerName} />
       <WordleGame />
     </div>
   );

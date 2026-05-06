@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { getRoom } from "../utils/gameRoomApi";
 
 export function useRoomPolling({ roomId, enabled, onUpdate, onAbandoned }) {
-  const currentPokemonIdRef = useRef(null);
   const onUpdateRef = useRef(onUpdate);
   const onAbandonedRef = useRef(onAbandoned);
 
@@ -25,18 +24,8 @@ export function useRoomPolling({ roomId, enabled, onUpdate, onAbandoned }) {
         }
 
         onUpdateRef.current?.(gameState);
-
-        if (
-          gameState.pokemon &&
-          gameState.pokemon.id !== currentPokemonIdRef.current
-        ) {
-          currentPokemonIdRef.current = gameState.pokemon.id;
-          console.log(
-            `🎮 Pokemon: ${gameState.pokemon.name} (ID: ${gameState.pokemon.id})`,
-          );
-        }
-      } catch (error) {
-        console.error("Room polling failed", error);
+      } catch {
+        // silently retry on network errors
       }
     }, 1000);
 

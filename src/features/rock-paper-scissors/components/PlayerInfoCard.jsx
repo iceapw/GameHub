@@ -1,7 +1,6 @@
 import { avatars } from "../../../utils/avatars";
 
 export function PlayerInfoCard({ playerName, playerAvatar }) {
-  console.log(playerAvatar);
   return (
     <section aria-labelledby="player-info-heading" className="card">
       <h2 id="player-info-heading">Player Info</h2>

@@ -77,7 +77,6 @@ export function useWordleGame() {
 
   const setupNewAnswer = async () => {
     setStatus("loading");
-    console.log("🎯 Wordle answer:", answer);
     setIsCheckingGuess(false);
     setIsRevealingGuess(false);
     setInvalidAttemptCount(0);
@@ -88,8 +87,8 @@ export function useWordleGame() {
       setAnswer(nextAnswer);
       setStatus("playing");
     } catch {
-      setStatus("playing");
       setAnswer("CRANE");
+      setStatus("playing");
     }
   };
 
@@ -240,7 +239,6 @@ export function useWordleGame() {
     setLetterStates({});
     setupNewAnswer();
   };
-  // console.log("🎯 Wordle answer:", answer);
   return {
     answer,
     currentGuess,

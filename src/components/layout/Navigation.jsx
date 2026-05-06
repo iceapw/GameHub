@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../styles/Navigation.css";
+import "../../styles/Navigation.css";
 
 export function Navigation() {
   const [hasName, setHasName] = useState(() =>
@@ -26,6 +26,7 @@ export function Navigation() {
     { to: "/rps", label: "Rock Paper Scissors" },
     { to: "/wordle", label: "Wordle" },
     { to: "/tic-tac-toe", label: "Tic Tac Toe" },
+    { to: "/memory", label: "Symbol Match" },
     { to: "/trivia", label: "Trivia" },
     { to: "/pokemon", label: "Pokemon" },
   ];

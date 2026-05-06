@@ -30,9 +30,9 @@ export function TriviaQuestion({ currentQuestion, gameState, onAnswer }) {
           let className = "trivia-option-button";
 
           if (hasAnswered && isCorrect) {
-            className += " trivia-option-correct";
+            className += " is-correct";
           } else if (hasAnswered && isSelected && !isCorrect) {
-            className += " trivia-option-wrong";
+            className += " is-incorrect";
           }
 
           return (

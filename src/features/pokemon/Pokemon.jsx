@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LobbyScreen } from "./pokemon/components/LobbyScreen";
-import { WaitingRoom } from "./pokemon/components/WaitingRoom";
-import { GameHeader } from "./pokemon/components/GameHeader";
-import { ScoreBar } from "./pokemon/components/ScoreBar";
-import { TileBoard } from "./pokemon/components/TileBoard";
-import { ActionPanel } from "./pokemon/components/ActionPanel";
-import { RoundResult } from "./pokemon/components/RoundResult";
-import { useRoomPolling } from "../hooks/useRoomPolling";
-import { useGameActions } from "./pokemon/logic/useGameActions";
-import { createGameState, fetchRandomPokemon } from "./pokemon/logic/pokemonGame";
-import { getPlayerId } from "../utils/gameRoomApi";
-import "../styles/PokemonGame.css";
+import { LobbyScreen } from "./components/LobbyScreen";
+import { WaitingRoom } from "./components/WaitingRoom";
+import { ScoreBar } from "../../components/game-room/ScoreBar";
+import { TileBoard } from "./components/TileBoard";
+import { ActionPanel } from "./components/ActionPanel";
+import { RoundResult } from "./components/RoundResult";
+import { GameRoomHeader } from "../../components/game-room/GameRoomHeader";
+import { useRoomPolling } from "../../hooks/useRoomPolling";
+import { useGameActions } from "./logic/useGameActions";
+import { createGameState, fetchRandomPokemon, playerLeft } from "./logic/pokemonGame";
+import { getPlayerId, abandonRoom, updateRoom, getRoom } from "../../utils/gameRoomApi";
+import "../../styles/PokemonGame.css";
 
 export default function Pokemon() {
   const navigate = useNavigate();
@@ -49,6 +49,40 @@ export default function Pokemon() {
     },
   });
 
+  const handleOnlineBack = async () => {
+    if (mode === "online" && roomId && game && game.phase !== "gameOver" && game.phase !== "abandoned") {
+      try {
+        const { gameState: latest } = await getRoom(roomId);
+        const remaining = latest.players.filter((p) => p.id !== playerId);
+        if (remaining.length === 0) {
+          await abandonRoom(roomId, latest);
+        } else if (latest.phase === "waiting") {
+          await updateRoom(roomId, {
+            ...latest,
+            players: remaining,
+            version: (latest.version ?? 0) + 1,
+          });
+        } else {
+          const activeOthers = latest.players.filter(
+            (p) => !p.left && p.id !== playerId,
+          ).length;
+          if (activeOthers <= 1) {
+            await abandonRoom(roomId, latest);
+          } else {
+            const next = playerLeft(latest, playerId);
+            await updateRoom(roomId, {
+              ...next,
+              version: (latest.version ?? 0) + 1,
+            });
+          }
+        }
+      } catch {
+        // ignore — already navigating away
+      }
+    }
+    resetToLobby();
+  };
+
   const { handleReveal, handleGuessSubmit, handleNextRound } = useGameActions({
     game,
     pokemon,
@@ -73,7 +107,6 @@ export default function Pokemon() {
     setMode("local");
     const p = await fetchRandomPokemon();
     setPokemon(p);
-    console.log(`🎮 Pokemon: ${p.name} (ID: ${p.id})`);
     setGame(
       createGameState(["Player 1", "Player 2"], {
         tileCount: 25,
@@ -100,7 +133,7 @@ export default function Pokemon() {
   if (screen === "lobby") {
     return (
       <div className="pg-wrapper">
-        <GameHeader mode={null} onBackToLobby={() => navigate("/")} />
+        <GameRoomHeader title="Who's That Pokémon?" onBackToLobby={() => navigate("/")} />
         <LobbyScreen
           onJoinRoom={handleJoinRoom}
           onLocalPlay={handleLocalPlay}
@@ -112,12 +145,7 @@ export default function Pokemon() {
   if (screen === "waiting") {
     return (
       <div className="pg-wrapper">
-        <GameHeader
-          mode="online"
-          roomId={roomId}
-          game={game}
-          onBackToLobby={resetToLobby}
-        />
+        <GameRoomHeader title="Who's That Pokémon?" onBackToLobby={handleOnlineBack} />
         <WaitingRoom
           roomId={roomId}
           onGameStart={handleGameStart}
@@ -131,12 +159,7 @@ export default function Pokemon() {
 
   return (
     <div className="pg-wrapper">
-      <GameHeader
-        mode={mode}
-        roomId={roomId}
-        game={game}
-        onBackToLobby={resetToLobby}
-      />
+      <GameRoomHeader title="Who's That Pokémon?" onBackToLobby={handleOnlineBack} />
 
       {mode === "online" && roomId && (
         <div className="pg-room-badge">

@@ -3,6 +3,7 @@ import { RpsPreview } from "./pages/previews/RpsPreview";
 import { TicTacToePreview } from "./pages/previews/TicTacToePreview";
 import { TriviaPreview } from "./pages/previews/TriviaPreview";
 import { WordlePreview } from "./pages/previews/WordlePreview";
+import { MemoryPreview } from "./pages/previews/MemoryPreview";
 
 export const games = [
   {
@@ -31,6 +32,15 @@ export const games = [
     emoji: "⬛",
     color: "#818cf8",
     Preview: TicTacToePreview,
+  },
+  {
+    key: "memory",
+    path: "/memory",
+    name: "Symbol Match",
+    description: "Flip the cards. Find the pairs.",
+    emoji: "✦",
+    color: "#60a5fa",
+    Preview: MemoryPreview,
   },
   {
     key: "trivia",

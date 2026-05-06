@@ -40,6 +40,7 @@ export function LobbyScreen({ onJoinRoom, onLocalPlay }) {
         );
         setRooms(open);
       } catch {
+        // ignore fetch errors — keep loading state cleared in finally
       } finally {
         setLoadingRooms(false);
       }

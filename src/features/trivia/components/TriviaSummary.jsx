@@ -1,17 +1,24 @@
 import React from "react";
 
 export function TriviaSummary({
+  currentQuestion,
   gameState,
   onNextQuestion,
   onRestart,
   questionCount,
 }) {
   const isLastQuestion = gameState.currentIndex >= questionCount - 1;
-  const summaryLabel = gameState.finished
-    ? "Trivia complete"
-    : gameState.selectedAnswer
-      ? "Answer locked in"
-      : "Awaiting answer";
+  const hasAnswered = Boolean(gameState.selectedAnswer);
+  const isCorrect = hasAnswered && currentQuestion && gameState.selectedAnswer === currentQuestion.correctAnswer;
+
+  let summaryLabel = null;
+  let summaryClass = "trivia-summary-label";
+  if (gameState.finished) {
+    summaryLabel = "Trivia complete";
+  } else if (hasAnswered) {
+    summaryLabel = isCorrect ? "Correct" : "Incorrect";
+    summaryClass += isCorrect ? " trivia-summary-correct" : " trivia-summary-incorrect";
+  }
 
   return (
     <section className="trivia-card trivia-summary-card">
@@ -32,7 +39,7 @@ export function TriviaSummary({
         </div>
       </div>
 
-      <p className="trivia-summary-label">{summaryLabel}</p>
+      {summaryLabel && <p className={summaryClass}>{summaryLabel}</p>}
 
       <div className="trivia-summary-actions">
         {gameState.finished ? (

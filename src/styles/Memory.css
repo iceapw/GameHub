@@ -1,0 +1,323 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&display=swap");
+
+@keyframes mem-fadein {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes mem-match-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50%       { box-shadow: 0 0 18px 4px var(--glyph-glow, rgba(129,140,248,0.5)); }
+}
+
+/* ── pg-wrapper override — height only, keep same padding/gap as other games ── */
+.mem-wrapper {
+  height: calc(100vh - 64px);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ── Lobby ── */
+.mem-lobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  flex: 1;
+  justify-content: center;
+}
+
+.mem-lobby-label {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #475569;
+  margin: 0;
+}
+
+.mem-diff-cards {
+  display: flex;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 560px;
+}
+
+.mem-diff-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(129, 140, 248, 0.15);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+
+.mem-diff-card:hover {
+  border-color: rgba(129, 140, 248, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.mem-diff-card--active {
+  border-color: var(--diff-color, #818cf8) !important;
+  background: color-mix(in srgb, var(--diff-color, #818cf8) 8%, transparent) !important;
+}
+
+.mem-diff-card-name {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--diff-color, #818cf8);
+}
+
+.mem-diff-card-grid {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: 0.05em;
+}
+
+.mem-diff-card-pairs {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.08em;
+}
+
+.mem-diff-card-hint {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.72rem;
+  color: #475569;
+  text-align: center;
+  letter-spacing: 0.04em;
+  margin-top: 0.2rem;
+}
+
+/* ── Board ── */
+.mem-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Stats bar */
+.mem-stats-bar {
+  display: flex;
+  gap: 2rem;
+  align-self: flex-end;
+}
+
+.mem-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.mem-stat-label {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.mem-stat-value {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: #818cf8;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 12px rgba(129, 140, 248, 0.4);
+}
+
+/* ── Card Grid ──
+   Budget: 100vh − 64px nav − 80px pg-wrapper padding − 48px gaps
+           − 52px header − 35px badge − 35px stats = ~314px fixed UI.
+   The width formula keeps cards square when vertical space is tight. */
+.mem-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), 1fr);
+  gap: 0.45rem;
+  width: min(
+    100%,
+    500px,
+    calc((100vh - 64px - 314px) * var(--cols, 4) / var(--rows, 4))
+  );
+  margin: auto 0;
+}
+
+/* ── Card ── */
+.mem-card {
+  cursor: pointer;
+  width: 100%;
+  aspect-ratio: 1;
+  perspective: 700px;
+  user-select: none;
+}
+
+.mem-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mem-card--flipped .mem-card-inner,
+.mem-card--matched .mem-card-inner {
+  transform: rotateY(180deg);
+}
+
+.mem-card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.mem-card-back {
+  background: rgba(129, 140, 248, 0.04);
+  border: 1px solid rgba(129, 140, 248, 0.18);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.mem-card:not(.mem-card--flipped):not(.mem-card--matched):hover .mem-card-back {
+  border-color: rgba(129, 140, 248, 0.45);
+  background: rgba(129, 140, 248, 0.09);
+}
+
+.mem-card-rune {
+  font-size: 1.1rem;
+  color: rgba(129, 140, 248, 0.22);
+}
+
+.mem-card-front {
+  transform: rotateY(180deg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: clamp(1.5rem, 5vw, 2.6rem);
+  color: var(--glyph-color, #818cf8);
+  text-shadow: 0 0 16px var(--glyph-glow, rgba(129,140,248,0.8));
+}
+
+.mem-card--matched .mem-card-front {
+  border-color: var(--glyph-color, rgba(129,140,248,0.4));
+  background: rgba(255, 255, 255, 0.05);
+  text-shadow:
+    0 0 28px var(--glyph-glow, rgba(129,140,248,0.9)),
+    0 0 10px var(--glyph-glow, rgba(129,140,248,0.6));
+  animation: mem-match-pulse 1.8s ease-in-out infinite;
+}
+
+/* ── Win overlay ── */
+.mem-win {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: mem-fadein 0.35s ease;
+}
+
+.mem-win-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 3.5rem;
+  border: 1px solid rgba(129, 140, 248, 0.35);
+  background: rgba(10, 10, 15, 0.97);
+  box-shadow: 0 0 60px rgba(129, 140, 248, 0.18);
+  animation: mem-fadein 0.4s ease;
+}
+
+.mem-win-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.mem-win-stats {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #475569;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.mem-win-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.mem-win-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 0.7rem 1.4rem;
+  text-transform: uppercase;
+  transition: filter 0.2s, transform 0.15s;
+}
+.mem-win-btn:hover  { filter: brightness(1.2); transform: translateY(-1px); }
+.mem-win-btn:active { transform: translateY(0); }
+
+.mem-win-btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  color: #64748b;
+}
+.mem-win-btn--ghost:hover {
+  border-color: rgba(129, 140, 248, 0.6);
+  color: #94a3b8;
+  filter: none;
+}
+
+@media (max-width: 540px) {
+  .mem-wrapper {
+    height: auto;
+    min-height: calc(100vh - 64px);
+    overflow: auto;
+  }
+  .mem-diff-cards { flex-direction: column; max-width: 320px; }
+  .mem-grid { gap: 0.3rem; }
+  .mem-win-box { padding: 2rem 1.5rem; }
+  .mem-win-actions { flex-direction: column; }
+}

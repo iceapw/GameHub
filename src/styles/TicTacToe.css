@@ -1,15 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&display=swap");
 
 .ttt-page {
-  width: min(980px, 94vw);
+  width: min(900px, 94vw);
   margin: 1.5rem auto 2.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem;
   border: 1px solid rgba(129, 140, 248, 0.2);
-  background: linear-gradient(160deg, rgba(17, 24, 39, 0.96), rgba(7, 10, 20, 0.98));
-  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .ttt-room-badge {
@@ -53,7 +52,7 @@
 }
 
 .ttt-status-turn {
-  color: #34d399;
+  color: #818cf8;
   font-weight: 700;
 }
 
@@ -103,9 +102,9 @@
 }
 
 .ttt-square-winning {
-  background: rgba(52, 211, 153, 0.16);
-  border-color: rgba(52, 211, 153, 0.7);
-  box-shadow: 0 0 18px rgba(52, 211, 153, 0.18);
+  background: rgba(129, 140, 248, 0.16);
+  border-color: rgba(129, 140, 248, 0.7);
+  box-shadow: 0 0 18px rgba(129, 140, 248, 0.18);
 }
 
 .ttt-status-card,
@@ -292,7 +291,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 980px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 2.5rem 1rem 3.5rem;
   box-sizing: border-box;
